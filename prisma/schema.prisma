@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Profiles {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  startDate    DateTime @default(now())        // Auto set when created
+  endDate      DateTime @updatedAt             // Auto update on any change
+
+  Orders       Orders[]
+}
+
+
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  createdAt   DateTime @default(now())
+}
+
+   
+model Orders{
+id Int @id @default(autoincrement()) 
+productName String
+status String
+amount  Float
+createdAt DateTime
+userId Int
+profiles Profiles @relation(fields: [userId],references: [id])
+
+
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  role     String
+}
+
+
