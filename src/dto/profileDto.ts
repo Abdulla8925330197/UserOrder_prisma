@@ -1,7 +1,7 @@
 
-export interface Profile{
-    id :number,
-    name:string,
-    email:string,
-    passwordHash:string
+export interface ProfileCreateDto {
+    id:number;
+  name: string;
+  email: string;
+  password: string;
 }

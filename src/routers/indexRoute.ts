@@ -12,4 +12,4 @@ app.use("/apiOrder",orderoute)//orderRoute
 app.use("/apiProduct",productRoute)//productRoute
  app.use("/apiProfile",profileroute)//profileRoute
 
-export default app;
+export default app; 

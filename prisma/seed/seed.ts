@@ -20,11 +20,13 @@ async function main() {
   await prisma.profiles.createMany({
     data: [
       {
+        id:1,
         name: "Vini",
         email: "vini@example.com",
         passwordHash: await bcrypt.hash("vini123", 10),
       },
       {
+        id:2,
         name: "Tilesh",
         email: "tilesh@example.com",
         passwordHash: await bcrypt.hash("tilesh123", 10),

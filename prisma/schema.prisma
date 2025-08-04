@@ -15,10 +15,10 @@ datasource db {
 }
 
 model Profiles {
-  id           Int      @id @default(autoincrement())
+  id           Int      @id 
   name         String
   email        String   @unique
-  passwordHash String
+  passwordHash     String
   startDate    DateTime @default(now())        // Auto set when created
   endDate      DateTime @updatedAt             // Auto update on any change
 
