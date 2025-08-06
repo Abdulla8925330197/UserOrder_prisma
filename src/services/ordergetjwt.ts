@@ -25,7 +25,7 @@ export const getOrdersWithFilters = async ({
       product: {
         name: {
           contains: search,
-          // Removed `mode` to fix Prisma 6.12 compatibility issue
+          
         },
       },
     }),
