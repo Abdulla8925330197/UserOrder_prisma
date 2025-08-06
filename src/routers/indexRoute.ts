@@ -1,15 +1,32 @@
 import express from "express";
 
-import orderoute from "./orderRoute";
+const router = express()
 
-import productRoute from "./productRoute";
+ 
+import{getProfileFromTokenforOrder}from "../controllers/usersOrder" 
+import {createOrder,
+    getAllOrder} from "../controllers/orderController"
+import {adminLoginController} from "../controllers/adminController";
+import {verifyAdmin} from "../middleware/jwtAuth";
+import {createProfile,getAllProfiles} from "../controllers/profileController";
+import {loginProfile,getProfileFromToken,} from "../controllers/getProfile";
+import {getOrders} from "../controllers/order.controller";
+import {generateFilterToken} from "../controllers/getOrderjwtCon";
+import {decodeFilterToken} from "../middleware/getOrderAuth"
 
- import profileroute from "./profileRoute";
-import getUser from "./getProfileverify"
-const app = express()
-app.use("/userLogin",getUser)//getProfileverify
-app.use("/apiOrder",orderoute)//orderRoute
-app.use("/apiProduct",productRoute)//productRoute
- app.use("/apiProfile",profileroute)//profileRoute
+router.post("/admin",adminLoginController);
+router.post("/postOrder",verifyAdmin,createOrder,);
+router.get("/getAllOrder",verifyAdmin,getAllOrder);
+//profile Routes
+// router.post("/admin",adminLoginController)
+ router.post("/postProfile",verifyAdmin,createProfile);
+router.get("/Getprofile",verifyAdmin,getAllProfiles);
+//profileByJWT auth
+router.post("/loginUser",loginProfile);
+router.get("/profile",getProfileFromToken)
+//userOrders
+// router.post("/orders",loginProfilewithOrder);
+router.get("/getOrderFilter",decodeFilterToken,getOrders);
+router.post("/Order",generateFilterToken)
 
-export default app; 
+export default router; 

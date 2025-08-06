@@ -33,6 +33,7 @@ model Product {
   description String
   price       Float
   createdAt   DateTime @default(now())
+  order Orders[]
 }
 
    
@@ -43,9 +44,10 @@ status String
 amount  Float
 createdAt DateTime
 userId Int
+productId Int 
 profiles Profiles @relation(fields: [userId],references: [id])
 
-
+product Product @relation(fields: [productId],references: [id])
 }
 
 model Admin {

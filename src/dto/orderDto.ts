@@ -4,7 +4,8 @@ productName : string,
 status:string,
 amount:number,
 createdAt:Date,
-userId:number
+userId:number,
+productId:number
 }
 export interface OrderFilterDto {
   userId?: number;
@@ -13,6 +14,9 @@ export interface OrderFilterDto {
   status?: string;
   search?: string;
   startDate?: Date;
+productId?:number
   endDate?: Date;
-}
+} 
+
+
 

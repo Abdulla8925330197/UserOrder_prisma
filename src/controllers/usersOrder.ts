@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const loginProfile = async (req: Request, res: Response) => {
+export const loginProfilewithOrder = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const token = await loginProfileService(email, password);
@@ -15,7 +15,7 @@ export const loginProfile = async (req: Request, res: Response) => {
     res.status(401).json({ message: error.message });
   }
 }; 
-export const getProfileFromToken = async (req: Request, res: Response) => {
+export const getProfileFromTokenforOrder = async (req: Request, res: Response) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader?.split(" ")[1];
 
@@ -29,14 +29,10 @@ export const getProfileFromToken = async (req: Request, res: Response) => {
     
     const profile = await prisma.profiles.findUnique({
       where: { id: decoded.id },
-      // include: {
-      //   Orders: true, 
-      // },
-      select:{
-        id:true,
-        name:true,
-        email:true
-      }
+      include: {
+        Orders: true, 
+      },
+     
     });
 
     if (!profile) {

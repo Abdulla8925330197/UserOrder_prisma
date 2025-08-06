@@ -4,10 +4,8 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  
+  // 1. Create Admin
   const hashedAdminPassword = await bcrypt.hash("Abd@123", 10);
-
-  
   await prisma.admin.create({
     data: {
       email: "abd@gmail.com",
@@ -16,74 +14,70 @@ async function main() {
     },
   });
 
-  
-  await prisma.profiles.createMany({
-    data: [
-      {
-        id:1,
-        name: "Vini",
-        email: "vini@example.com",
-        passwordHash: await bcrypt.hash("vini123", 10),
-      },
-      {
-        id:2,
-        name: "Tilesh",
-        email: "tilesh@example.com",
-        passwordHash: await bcrypt.hash("tilesh123", 10),
-      },
-    ],
+  // 2. Create Profiles
+  const vini = await prisma.profiles.create({
+    data: {
+      id:1,
+      name: "Vini",
+      email: "vini@example.com",
+      passwordHash: await bcrypt.hash("vini123", 10),
+    },
   });
 
-  
-  await prisma.product.createMany({
-    data: [
-      {
-        name: "shirt",
-        description: "Comfortable cotton t-shirt",
-        price: 19.99,
-      },
-      {
-        name: "Nike",
-        description: "Running shoes",
-        price: 49.99,
-      },
-    ],
+  const tilesh = await prisma.profiles.create({
+    data: {
+      id:2,
+      name: "Tilesh",
+      email: "tilesh@example.com",
+      passwordHash: await bcrypt.hash("tilesh123", 10),
+    },
   });
 
-  
-  const user1 = await prisma.profiles.findUnique({ where: { email: "vini@example.com" } });
-  const user2 = await prisma.profiles.findUnique({ where: { email: "tilesh@example.com" } });
+  // 3. Create Products
+  const shirt = await prisma.product.create({
+    data: {
+      name: "shirt",
+      description: "Comfortable cotton t-shirt",
+      price: 19.99,
+    },
+  });
 
-  if (!user1 || !user2) {
-    throw new Error(" One or both users not found.");
-  }
+  const nike = await prisma.product.create({
+    data: {
+      name: "Nike",
+      description: "Running shoes",
+      price: 49.99,
+    },
+  });
 
- 
+  // 4. Create Orders (link with userId and productId)
   await prisma.orders.createMany({
     data: [
       {
-        productName: "shirt",
+        productName: shirt.name,
         status: "pending",
-        amount: 19.99,
+        amount: shirt.price,
         createdAt: new Date("2025-07-20"),
-        userId: user1.id,
+        userId: vini.id,
+        productId: shirt.id,
       },
       {
-        productName: "Nike",
+        productName: nike.name,
         status: "shipped",
-        amount: 49.99,
+        amount: nike.price,
         createdAt: new Date("2025-07-22"),
-        userId: user2.id,
+        userId: tilesh.id,
+        productId: nike.id,
       },
     ],
   });
 
-  console.log(" Seed completed.");
+  console.log("✅ Seeding completed successfully.");
 }
 
 main()
   .catch((e) => {
-    console.error(" Seeding error:", e);
+    console.error("❌ Seeding error:", e);
     process.exit(1);
   })
   .finally(async () => {
